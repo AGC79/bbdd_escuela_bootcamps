@@ -1,3 +1,15 @@
+-- Eliminar las tablas existentes si existen para evitar conflictos al recrearlas.
+-- Esto asegura que no haya errores por duplicación de tablas al ejecutar scripts de creación.
+
+DROP TABLE IF EXISTS Proyectos_realizados;
+DROP TABLE IF EXISTS Alumno;
+DROP TABLE IF EXISTS Proyectos;
+DROP TABLE IF EXISTS Profesor;
+DROP TABLE IF EXISTS Bootcamp;
+DROP TABLE IF EXISTS Promocion;
+DROP TABLE IF EXISTS Campus;
+
+-- CREACIÓN DE TABLAS
 CREATE TABLE Campus (
     id_campus INT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL
@@ -38,9 +50,10 @@ CREATE TABLE Alumno (
 CREATE TABLE Proyectos_realizados (
     id_proyectos_realizados INT PRIMARY KEY,
     id_alumno INT NOT NULL,
-    id_bootcamp INT NOT NULL,
-
-    FOREIGN KEY (id_bootcamp) REFERENCES Bootcamp(id_bootcamp)
+    id_proyecto INT NOT NULL,
+    calificacion VARCHAR(10) NOT NULL CHECK (calificacion IN ('Apto','No Apto')),
+    FOREIGN KEY (id_alumno) REFERENCES Alumno(id_alumno),
+    FOREIGN KEY (id_proyecto) REFERENCES Proyectos(id_proyecto)
 );
 
 CREATE TABLE Profesor (
@@ -56,6 +69,9 @@ CREATE TABLE Profesor (
     FOREIGN KEY (id_promocion) REFERENCES Promocion(id_promocion),
     FOREIGN KEY (id_campus) REFERENCES Campus(id_campus)
 );
+
+
+-- INSERCIÓN MANUAL DE VALORES PARA LA MAYORÍA DE LAS TABLAS
 
 INSERT INTO bootcamp (id_bootcamp, nombre)
 VALUES 
@@ -92,10 +108,6 @@ VALUES
 	(8, 1, 'Proyecto_React'),
 	(9, 1, 'Proyecto_FullSatck');
 
--- VALORES INSERTADOS EN TABLA alumno CON AUTOMATIZACION
-
--- VALORES INSERTADOS EN TABLA proyectos_realizados CON AUTOMATIZACION
-
 INSERT INTO Profesor (id_profesor, nombre, rol, modalidad, id_bootcamp, id_promocion, id_campus) VALUES
 (0, 'Noa Yáñez', 'TA', 'Presencial', 0, 4, 0),
 (1, 'Saturnina Benitez', 'TA', 'Presencial', 0, 4, 0),
@@ -107,3 +119,7 @@ INSERT INTO Profesor (id_profesor, nombre, rol, modalidad, id_bootcamp, id_promo
 (7, 'Mario Prats', 'LI', 'Online', 1, 0, 1),
 (8, 'Luis Ángel Suárez', 'LI', 'Online', 1, 4, 0),
 (9, 'María Dolores Diaz', 'LI', 'Online', 0, 4, 0);
+
+-- VALORES INSERTADOS EN TABLA alumno CON AUTOMATIZACIÓN (VER DOCUMENTO proyecto_bbdd_inserciones_automatizadas.ipynb)
+
+-- VALORES INSERTADOS EN TABLA proyectos_realizados CON AUTOMATIZACIÓN (VER DOCUMENTO proyecto_bbdd_inserciones_automatizadas.ipynb)
